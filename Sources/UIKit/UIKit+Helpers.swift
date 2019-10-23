@@ -38,20 +38,17 @@ extension UITraitCollection {
     /// is compatible with iOS 9.x and will use the
     /// `UIApplication.shared.preferredContentSizeCategory` if the trait collection's
     /// `preferredContentSizeCategory` is `UIContentSizeCategory.unspecified`.
+    /// Extension fix.
     public var bon_preferredContentSizeCategory: BonMotContentSizeCategory {
         if #available(iOS 10.0, tvOS 10.0, *) {
-            if preferredContentSizeCategory != .unspecified {
-                return preferredContentSizeCategory
-            }
-        }
-        // `UIApplication.shared` is not a valid object in unit tests. Fall back
-        // to a default value if the delegate is nil.
-        if UIApplication.shared.delegate != nil {
-            return UIApplication.shared.preferredContentSizeCategory
-        }
-        else {
-            return UIContentSizeCategory.large
-        }
+			if preferredContentSizeCategory != .unspecified {
+				return preferredContentSizeCategory
+			}
+			return UIScreen.main.traitCollection.preferredContentSizeCategory
+		} else {
+			// Fallback on earlier versions
+			return UIContentSizeCategory.large
+		}
     }
 
 }
